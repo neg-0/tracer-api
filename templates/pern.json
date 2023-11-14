@@ -1,0 +1,38 @@
+{
+  "name": "PERN: Postgres, Express, React, Node",
+  "services": [
+    {
+      "id": 0,
+      "name": "Client",
+      "language": "javascript",
+      "technology": "",
+      "framework": "react",
+      "database": "",
+      "subdirectory": "",
+      "runtime": "node",
+      "type": "frontend"
+    },
+    {
+      "id": 1,
+      "name": "Server",
+      "language": "javascript",
+      "technology": "",
+      "framework": "express",
+      "database": "",
+      "subdirectory": "",
+      "runtime": "node",
+      "type": "backend"
+    },
+    {
+      "id": 2,
+      "name": "Database",
+      "language": "",
+      "technology": "",
+      "framework": "",
+      "database": "postgres",
+      "subdirectory": "",
+      "runtime": "",
+      "type": "database"
+    }
+  ]
+}

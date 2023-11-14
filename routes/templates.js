@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const templates = require('../data/service_templates.json');
+const templates = require('../templates');
 
 router.get('/', (req, res) => {
   res.send(templates)
