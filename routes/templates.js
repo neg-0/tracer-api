@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const templates = require('../templates');
+const temlatesController = require('../controllers/templatesController');
 
-router.get('/', (req, res) => {
-  res.send(templates)
-});
+router
+  .route('/')
+  .get(temlatesController.getTemplates);
 
 module.exports = router;
