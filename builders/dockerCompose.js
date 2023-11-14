@@ -20,7 +20,7 @@ services:
   database:
     image: postgres
     ports:
-      - "5432:5432"
+      - "4432:5432"
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: postgres
