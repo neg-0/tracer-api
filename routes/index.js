@@ -5,7 +5,6 @@ router.get('/', (req, res) => {
 });
 
 router.use('/releases', require('./releases'));
-router.use('/create', require('./create'));
 router.use('/apps', require('./apps'));
 router.use('/languages', require('./languages'));
 router.use('/options', require('./options'));
