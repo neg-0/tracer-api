@@ -81,4 +81,7 @@ dist
 .dynamodb/
 
 # Output directory
-output
+output/*
+
+# Keep the output directory empty
+!output/.gitkeep
