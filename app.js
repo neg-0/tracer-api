@@ -2,6 +2,7 @@ const config = require('./middleware/config');
 const express = require('express');
 const cors = require('cors');
 const routes = require('./routes');
+const knex = require('./middleware/knex');
 const app = express();
 const port = 3000;
 
