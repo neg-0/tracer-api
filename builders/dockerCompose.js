@@ -1,5 +1,7 @@
+const fs = require('fs');
+const path = require('path');
 
-function createComposeFile(cwd) {
+function createComposeFile(cwd, services) {
   const dockerCompose = `
 version: '3'
 services:
@@ -19,6 +21,14 @@ services:
     image: postgres
     ports:
       - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - ./db:/var/lib/postgresql/data
+volumes:
+  db:
 `;
 
   fs.writeFileSync(path.join(cwd, 'docker-compose.yml'), dockerCompose);
