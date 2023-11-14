@@ -7,9 +7,9 @@ const docker = require('../builders/docker');
  * @param {string} cwd 
  * @param {{}} service 
  */
-function init(projectPath, servicePath, service) {
+async function init(projectPath, servicePath, service) {
   // Initialize new npm projects for the server. Client will be initialized by builder
-  node.initPackage(servicePath, service);
+  await node.initPackage(servicePath, service);
 
   // In the server directory, set up a basic Express app with PostgreSQL integration
   if (service.framework === 'express') { express.createApp(servicePath, service); }

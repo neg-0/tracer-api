@@ -3,7 +3,7 @@
  * @param {string} cwd 
  * @param {{}} service 
  */
-function init(projectPath, servicePath, service) {
+async function init(projectPath, servicePath, service) {
   // Nothing is required here as the database will be created by the docker compose file
 }
 
