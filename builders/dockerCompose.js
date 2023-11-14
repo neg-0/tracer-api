@@ -8,16 +8,16 @@ services:
   client:
     build: ./client
     ports:
-      - "3000:3000"
+      - "4000:3000"
     depends_on:
       - server
   server:
     build: ./server
     ports:
-      - "3001:3001"
+      - "4001:3000"
     depends_on:
-      - db
-  db:
+      - database
+  database:
     image: postgres
     ports:
       - "5432:5432"
@@ -26,9 +26,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
     volumes:
-      - ./db:/var/lib/postgresql/data
+      - ./database-data:/var/lib/postgresql/data
 volumes:
-  db:
+  database-data:
 `;
 
   fs.writeFileSync(path.join(cwd, 'docker-compose.yml'), dockerCompose);
