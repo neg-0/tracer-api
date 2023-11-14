@@ -4,7 +4,7 @@ const optionsArray = [
   {
     option: 'frontend',
     label: 'Frontend',
-    type: 'category',
+    type: 'type',
     requiredBy: [],
     compatibleWith: [],
     description: 'A frontend for your application',
@@ -15,7 +15,7 @@ const optionsArray = [
   {
     option: 'backend',
     label: 'Backend',
-    type: 'category',
+    type: 'type',
     requiredBy: [],
     compatibleWith: [],
     description: 'A backend for your application',
@@ -26,7 +26,7 @@ const optionsArray = [
   {
     option: 'database',
     label: 'Database',
-    type: 'category',
+    type: 'type',
     requiredBy: [],
     compatibleWith: [],
     description: 'A database for your application',
