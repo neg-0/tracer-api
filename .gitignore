@@ -79,3 +79,6 @@ dist
 
 # DynamoDB Local files
 .dynamodb/
+
+# Output directory
+output
