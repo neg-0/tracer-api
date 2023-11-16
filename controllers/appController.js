@@ -8,6 +8,13 @@ const Deployment = require('../models/deployments');
 exports.getApps = async (req, res) => {
   try {
     const apps = await App.getApps();
+    if (!apps) {
+      res.status(404).json({
+        status: 'error',
+        message: 'No apps found'
+      });
+      return;
+    }
     res.status(200).json({
       status: 'success',
       data: {
@@ -24,7 +31,7 @@ exports.getApps = async (req, res) => {
 
 exports.getApp = async (req, res) => {
   try {
-    const app = await App.getApp(req.params.appKey);
+    const app = await App.getApp(req.params.appId);
     res.status(200).json({
       status: 'success',
       data: {
@@ -40,14 +47,18 @@ exports.getApp = async (req, res) => {
 };
 
 exports.createApp = async (req, res) => {
-  const { name, services } = req.body;
+  const { name, projectName, services: reqServices } = req.body;
 
   // Create a new database entry
-  App.createApp(name);
+  const app = await App.createApp(name, projectName);
+
+  // Create a new database entry for each service
+  let services = await Service.createServices(reqServices, app.id);
+
+  let deployments = [];
 
   // Build the app files
   const { projectPath, servicePaths } = await builder.createApp(name, services);
-  const projectName = name.replace(/\s/g, '-').toLowerCase();
   console.log(`Building app... ${name}`);
 
   const docker = new Dockerode();
@@ -61,16 +72,20 @@ exports.createApp = async (req, res) => {
   // Get the exposed ports for each service
   const ports = {};
   for (const service of services) {
-
-    // Add the service to the database
-    const { id } = Service.createService(service);
-
     const container = containers.find(container => container.Names[0].includes(projectName + '-' + service.subdirectory));
     const port = container?.Ports[0].PublicPort;
     ports[service.name] = port;
 
     // Add deployment to database
-    const deployment = Deployment.createDeployment(service.subdirectory, `http://localhost:${port}`, id);
+    const deployment = await Deployment.createDeployment(service.subdirectory, `http://localhost:${port}`, service.id);
+    deployments.push(deployment);
+
+    console.log('Deployment:', deployment)
+
+    // If the service is the frontend, add the deployment address to the app
+    if (service.type === 'frontend') {
+      await App.updateApp(app.id, { address: deployment.address });
+    }
   }
 
   console.log('Ports:', ports);
@@ -83,6 +98,7 @@ exports.createApp = async (req, res) => {
       servicePaths,
       name,
       services,
+      deployments,
       ports
     }
   });

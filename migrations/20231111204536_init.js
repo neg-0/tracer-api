@@ -14,6 +14,7 @@ exports.up = function (knex) {
     .createTable('apps', table => {
       table.increments('id');
       table.string('name');
+      table.string('project_name');
       table.string('key').unique();
       table.string('address');
       table.integer('user_id').unsigned().references('id').inTable('users');
@@ -29,10 +30,12 @@ exports.up = function (knex) {
       table.string('subdirectory');
       table.string('runtime');
       table.string('type');
+      table.integer('app_id').unsigned().references('id').inTable('apps');
       table.timestamps();
     })
     .createTable('deployments', table => {
       table.increments('id');
+      table.string('name');
       table.string('address');
       table.integer('service_id').unsigned().references('id').inTable('services');
       table.time('deployed_at').defaultTo(knex.fn.now());
@@ -46,5 +49,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable('apps').dropTable('users').dropTable('services').dropTable('deployments');
+  return knex.schema.dropTable('deployments').dropTable('services').dropTable('apps').dropTable('users');
 };

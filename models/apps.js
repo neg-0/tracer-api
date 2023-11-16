@@ -1,58 +1,46 @@
-const knex = require("knex");
+const knex = require("../middleware/knex");
 
 /**
  * Get all applications registered with the hub.
  */
-function getApps() {
-  knex("apps").select("*").then((apps) => {
-    return apps;
-  });
+async function getApps() {
+  return knex("apps").select("*")
+    .then((apps) => {
+      return apps;
+    });
 }
 
 /**
  * Get a specific application registered with the hub.
  */
-function getApp(appKey) {
-  knex("apps")
+async function getApp(appKey) {
+  return knex("apps")
     .select("*")
-    .where("key", "=", appKey)
-    .then((app) => {
-      return app;
-    });
+    .where("project_name", "=", appKey)
+    .first();
 }
 
 /**
  * Add a new application.
  */
-function createApp(name, services) {
-  // Create a transaction to ensure that all database operations succeed
-  // Add the app to the database
-  // Add the services to the database
+async function createApp(name, projectName) {
+  return knex("apps")
+    .insert({ name, project_name: projectName }, "*")
+    .then((app) => {
+      return app[0];
+    });
+}
 
-  knex.transaction((trx) => {
-    trx("apps")
-      .insert({
-        name: name,
-      })
-      .then((app) => {
-        for (const service of services) {
-          trx("services")
-            .insert({
-              name: service.name,
-              language: service.language,
-              technology: service.technology,
-              framework: service.framework,
-              database: service.database,
-              subdirectory: service.subdirectory,
-              runtime: service.runtime,
-              type: service.type,
-            })
-            .then((service) => {
-              return service;
-            });
-        }
-      });
-  });
+/**
+ * Update an application.
+ */
+async function updateApp(id, app) {
+  return knex("apps")
+    .where("id", "=", id)
+    .update(app, "*")
+    .then((app) => {
+      return app[0];
+    });
 }
 
 /**
@@ -81,5 +69,6 @@ module.exports = {
   getApps,
   getApp,
   createApp,
+  updateApp,
   deleteApp,
 };
