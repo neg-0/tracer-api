@@ -15,6 +15,7 @@ exports.up = function (knex) {
       table.increments('id');
       table.string('name');
       table.string('project_name');
+      table.string('deployment_type');
       table.string('key').unique();
       table.string('address');
       table.integer('user_id').unsigned().references('id').inTable('users');
@@ -37,6 +38,8 @@ exports.up = function (knex) {
       table.increments('id');
       table.string('name');
       table.string('address');
+      table.string('docker_image');
+      table.string('docker_container');
       table.integer('service_id').unsigned().references('id').inTable('services');
       table.time('deployed_at').defaultTo(knex.fn.now());
       table.time('last_alive').defaultTo(knex.fn.now());
