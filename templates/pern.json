@@ -6,7 +6,7 @@
       "name": "Client",
       "language": "javascript",
       "technology": "",
-      "framework": "react",
+      "framework": "react-vite",
       "database": "",
       "subdirectory": "",
       "runtime": "node",
