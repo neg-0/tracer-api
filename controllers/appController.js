@@ -47,19 +47,18 @@ exports.getApp = async (req, res) => {
 };
 
 exports.createApp = async (req, res) => {
-  const { name, projectName, services: reqServices } = req.body;
+  const appData = req.body;
 
-  // Create a new database entry
-  const app = await App.createApp(name, projectName);
+  console.log('Creating app:', appData);
 
   // Create a new database entry for each service
-  let services = await Service.createServices(reqServices, app.id);
+  let services = await Service.createServices(appData);
 
   let deployments = [];
 
   // Build the app files
-  const { projectPath, servicePaths } = await builder.createApp(name, services);
-  console.log(`Building app... ${name}`);
+  const { projectPath, servicePaths } = await builder.createApp(appData);
+  console.log(`Building app... ${appData.name}`);
 
   const docker = new Dockerode();
 
@@ -81,15 +80,19 @@ exports.createApp = async (req, res) => {
     deployments.push(deployment);
 
     console.log('Deployment:', deployment)
-
-    // If the service is the frontend, add the deployment address to the app
-    if (service.type === 'frontend') {
-      await App.updateApp(app.id, { address: deployment.address });
-    }
   }
 
   console.log('Ports:', ports);
   console.log('App built successfully');
+
+  // Create a new database entry
+  const { id } = await App.createApp(appData);
+
+  // Find the first service that is a frontend and add its address to the app
+  const frontendService = services.find(service => service.type === 'frontend');
+  if (frontendService) {
+    await App.updateApp(id, { address: frontendService.address });
+  }
 
   res.status(201).json({
     status: 'success',

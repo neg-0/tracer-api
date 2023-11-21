@@ -23,9 +23,16 @@ async function getApp(appKey) {
 /**
  * Add a new application.
  */
-async function createApp(name, projectName) {
+async function createApp(appData) {
+  const app = { ...appData };
+  // Generate a new app key
+  app.key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+  // Remove the servives key
+  delete app.services;
+
   return knex("apps")
-    .insert({ name, project_name: projectName }, "*")
+    .insert(app, "*")
     .then((app) => {
       return app[0];
     });

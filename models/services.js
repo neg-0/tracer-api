@@ -13,9 +13,10 @@ async function createService(service, appId) {
     });
 }
 
-async function createServices(services, appId) {
+async function createServices(appData) {
+  const { services, id } = appData;
   return Promise.all(services.map((service) => {
-    return createService(service, appId);
+    return createService(service, id);
   }));
 }
 

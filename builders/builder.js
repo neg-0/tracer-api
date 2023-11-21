@@ -1,4 +1,3 @@
-const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const git = require('../builders/git');
@@ -11,7 +10,8 @@ const dockerCompose = require('../builders/dockerCompose');
  * @param {Array<Object>} services - An array of service objects.
  * @returns {{projectPath: string, appName: string, services: Array<Object>}} - An object containing the project path, app name, and services.
  */
-async function createApp(appName, services) {
+async function createApp(app) {
+  const { name: appName, services } = app;
   console.log(`Creating app... ${appName}`);
 
   // Create a new directory for the project at root/output
@@ -56,7 +56,7 @@ async function createApp(appName, services) {
   }
 
   // At the root directory, create a docker-compose.yml file for easy local development
-  dockerCompose.createComposeFile(projectPath, services);
+  dockerCompose.createComposeFile(projectPath, app);
 
   console.log('App created!');
 
